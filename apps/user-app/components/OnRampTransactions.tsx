@@ -1,0 +1,50 @@
+import { Card } from "@repo/ui/card"
+
+const getStatement = (status: string) => {
+    if (status === 'Success') {
+      return 'Received INR'
+    } else if (status === 'Processing') {
+      return 'To be Received INR'
+    } else {
+      return 'Failed'
+    }
+  }
+
+export const OnRampTransactions = ({transactions,title}:{
+    transactions: {
+        time: Date,
+        amount: number,
+        // status: 'Success' | 'Failure' | 'Processing',
+        status: string
+        provider: string
+    }[];
+    title: string
+}) => {
+    if (!transactions.length) {
+        return <Card title={title}>
+        <div className="text-center pb-8 pt-8">
+            No {title}
+        </div>
+    </Card>
+    }
+
+    return <Card title={title}>
+        <div className="pt-2">
+            {transactions.map(t => 
+                <div className="flex justify-between">
+                    <div>
+                        <div className="text-sm">
+                            {getStatement(t.status)}
+                        </div>
+                        <div>
+                            {t.time.toDateString()}
+                        </div>
+                    </div>
+                    <div className="flex flex-col justify-center">
+                        + Rs {t.amount/100}
+                    </div>
+                </div>
+            )}
+        </div>
+    </Card>
+}
